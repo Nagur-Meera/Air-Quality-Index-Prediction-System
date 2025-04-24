@@ -1,0 +1,17 @@
+feature_names
+PT08.S1(CO)
+PT08.S2(NMHC)
+PT08.S3(NOx)
+PT08.S4(NO2)
+PT08.S5(O3)
+T
+RH
+C6H6(GT)
+NOx(GT)
+NO2(GT)
+NMHC(GT)
+Hour
+Month
+DayOfYear
+NOx_NO2_ratio
+CO_NMHC_ratio

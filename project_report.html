@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality Index Prediction System - Project Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --text-color: #333;
+            --background-color: #f8f9fa;
+            --code-background: #f1f1f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+            margin-top: 1.5em;
+        }
+
+        h1 {
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.3em;
+        }
+
+        h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.2em;
+        }
+
+        code {
+            background-color: var(--code-background);
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        pre {
+            background-color: var(--code-background);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+
+        .toc {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            max-width: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .toc > ul {
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        .toc a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .toc ul ul {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .note {
+            background-color: #e7f3fe;
+            border-left: 6px solid var(--secondary-color);
+            padding: 10px;
+            margin: 20px 0;
+        }
+
+        .diagram {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .mermaid svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .team-members {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .team-members h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .team-members ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .team-members li {
+            margin: 10px 0;
+            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-members .name {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .team-members .id {
+            color: var(--secondary-color);
+            font-family: monospace;
+        }
+
+        .course-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .course-info h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 5px 0;
+        }
+
+        .info-item .label {
+            font-weight: bold;
+            color: var(--primary-color);
+            min-width: 120px;
+            margin-right: 10px;
+        }
+
+        .info-item .value {
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .references {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .references ol {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+
+        .references li {
+            margin: 15px 0;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .references li:last-child {
+            border-bottom: none;
+        }
+
+        .references span {
+            display: block;
+            margin: 3px 0;
+        }
+
+        .ref-title {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .ref-authors {
+            font-style: italic;
+            color: var(--text-color);
+        }
+
+        .ref-source {
+            color: var(--secondary-color);
+        }
+
+        .ref-year {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .ref-link {
+            display: inline-block;
+            margin-top: 5px;
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .ref-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Air Quality Index Prediction System - Project Report</h1>
+
+    <div class="course-info">
+        <h2>Course Information</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="label">Course Code:</span>
+                <span class="value">CSE303</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Course Name:</span>
+                <span class="value">Machine Learning Lab</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Faculty:</span>
+                <span class="value">Dr. Soumyajyoti Biswas</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="team-members">
+        <h2>Team Members</h2>
+        <ul>
+            <li>
+                <span class="name">Nikhil Sireesh Thalakola</span>
+                <span class="id">AP22110010009</span>
+            </li>
+            <li>
+                <span class="name">Nagur Meeravali Shaik</span>
+                <span class="id">AP22110010061</span>
+            </li>
+            <li>
+                <span class="name">Geetesh Kotturu</span>
+                <span class="id">AP22110010062</span>
+            </li>
+            <li>
+                <span class="name">Chaturya Lavudu</span>
+                <span class="id">AP22110010733</span>
+            </li>
+            <li>
+                <span class="name">Stella Manikyam Chitturi</span>
+                <span class="id">AP22110011286</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#executive-summary">1. Executive Summary</a>
+                <ul>
+                    <li><a href="#project-overview">1.1 Project Overview</a></li>
+                    <li><a href="#key-achievements">1.2 Key Achievements</a></li>
+                    <li><a href="#impact">1.3 Impact</a></li>
+                </ul>
+            </li>
+            <li><a href="#introduction">2. Introduction</a>
+                <ul>
+                    <li><a href="#background">2.1 Background</a></li>
+                    <li><a href="#problem-statement">2.2 Problem Statement</a></li>
+                    <li><a href="#objectives">2.3 Objectives</a></li>
+                </ul>
+            </li>
+            <li><a href="#dataset-analysis">3. Dataset Analysis</a>
+                <ul>
+                    <li><a href="#dataset-overview">3.1 Dataset Overview</a></li>
+                    <li><a href="#feature-description">3.2 Feature Description</a>
+                        <ul>
+                            <li><a href="#sensor-measurements">3.2.1 Sensor Measurements</a></li>
+                            <li><a href="#environmental-parameters">3.2.2 Environmental Parameters</a></li>
+                            <li><a href="#ground-truth-measurements">3.2.3 Ground Truth Measurements</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#data-preprocessing">3.3 Data Preprocessing</a>
+                        <ul>
+                            <li><a href="#missing-value-treatment">3.3.1 Missing Value Treatment</a></li>
+                            <li><a href="#feature-engineering">3.3.2 Feature Engineering</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#system-architecture">4. System Architecture</a>
+                <ul>
+                    <li><a href="#high-level-architecture">4.1 High-Level Architecture</a></li>
+                    <li><a href="#detailed-data-flow">4.2 Detailed Data Flow</a>
+                        <ul>
+                            <li><a href="#input-processing">4.2.1 Input Processing Layer</a></li>
+                            <li><a href="#feature-processing">4.2.2 Feature Processing Pipeline</a></li>
+                            <li><a href="#model-ensemble-pipeline">4.2.3 Model Ensemble Pipeline</a></li>
+                            <li><a href="#output-processing">4.2.4 Output Processing Pipeline</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#data-flow-example">4.3 Data Flow Example</a></li>
+                </ul>
+            </li>
+            <li><a href="#model-development">5. Model Development</a>
+                <ul>
+                    <li><a href="#neural-network">5.1 Neural Network Architecture</a>
+                        <ul>
+                            <li><a href="#layer-explanation">5.1.1 Layer-by-Layer Explanation</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#training-process">5.2 Training Process</a>
+                        <ul>
+                            <li><a href="#loss-function">5.2.1 Loss Function</a></li>
+                            <li><a href="#optimizer">5.2.2 Optimizer</a></li>
+                            <li><a href="#training-config">5.2.3 Training Configuration</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#random-forest">5.3 Random Forest Model</a></li>
+                    <li><a href="#linear-regression">5.4 Linear Regression Baseline</a></li>
+                    <li><a href="#model-ensemble">5.5 Model Ensemble</a></li>
+                </ul>
+            </li>
+            <li><a href="#implementation-details">6. Implementation Details</a>
+                <ul>
+                    <li><a href="#project-structure">6.1 Project Structure</a></li>
+                    <li><a href="#dependencies">6.2 Dependencies</a></li>
+                </ul>
+            </li>
+            <li><a href="#results-and-analysis">7. Results and Analysis</a>
+                <ul>
+                    <li><a href="#model-performance">7.1 Model Performance Metrics</a></li>
+                    <li><a href="#feature-importance">7.2 Feature Importance</a></li>
+                    <li><a href="#error-distribution">7.3 Error Distribution</a></li>
+                    <li><a href="#prediction-actual">7.4 Prediction vs Actual</a></li>
+                    <li><a href="#air-quality-categories">7.5 Air Quality Categories</a></li>
+                </ul>
+            </li>
+            <li><a href="#usage-guide">8. Usage Guide</a>
+                <ul>
+                    <li><a href="#training-models">8.1 Training the Models</a></li>
+                    <li><a href="#making-predictions">8.2 Making Predictions</a></li>
+                    <li><a href="#sample-input">8.3 Sample Input</a></li>
+                    <li><a href="#sample-output">8.4 Sample Output</a></li>
+                </ul>
+            </li>
+            <li><a href="#future-improvements">9. Future Improvements</a>
+                <ul>
+                    <li><a href="#model-enhancements">9.1 Model Enhancements</a></li>
+                    <li><a href="#system-improvements">9.2 System Improvements</a></li>
+                </ul>
+            </li>
+            <li><a href="#technical-documentation">10. Technical Documentation</a>
+                <ul>
+                    <li><a href="#model-parameters">10.1 Model Parameters</a>
+                        <ul>
+                            <li><a href="#rf-params">10.1.1 Random Forest</a></li>
+                            <li><a href="#nn-params">10.1.2 Neural Network</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#input-validation">10.2 Input Validation</a></li>
+                    <li><a href="#performance-metrics">10.3 Performance Metrics</a>
+                        <ul>
+                            <li><a href="#rmse">10.3.1 RMSE</a></li>
+                            <li><a href="#mae">10.3.2 MAE</a></li>
+                            <li><a href="#r2-score">10.3.3 R² Score</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#references">11. References</a></li>
+        </ul>
+    </div>
+
+    <section id="executive-summary">
+        <h2>1. Executive Summary</h2>
+        <h3>1.1 Project Overview</h3>
+        <p>The Air Quality Index Prediction System is an advanced machine learning solution designed to predict Carbon Monoxide (CO) concentrations in air. The system utilizes multiple sensor readings, environmental parameters, and an ensemble of three different machine learning models to provide accurate predictions and health impact assessments.</p>
+
+        <h3>1.2 Key Achievements</h3>
+        <ul>
+            <li>Implementation of a multi-model ensemble prediction system</li>
+            <li>Real-time air quality assessment capabilities</li>
+            <li>Health impact categorization based on WHO standards</li>
+            <li>Comprehensive visualization of model performance</li>
+            <li>Robust error handling and input validation</li>
+        </ul>
+
+        <h3>1.3 Impact</h3>
+        <p>The system provides valuable insights for:</p>
+        <ul>
+            <li>Environmental monitoring agencies</li>
+            <li>Public health organizations</li>
+            <li>Urban planning departments</li>
+            <li>Air quality researchers</li>
+        </ul>
+    </section>
+
+    <section id="introduction">
+        <h2>2. Introduction</h2>
+        <h3>2.1 Background</h3>
+        <p>Air quality monitoring and prediction have become increasingly important due to rising pollution levels in urban areas. This system addresses the need for accurate, real-time air quality assessment using modern machine learning techniques.</p>
+
+        <h3>2.2 Problem Statement</h3>
+        <p>The challenge is to accurately predict CO concentrations using various sensor readings and environmental parameters, while providing meaningful health impact assessments.</p>
+
+        <h3>2.3 Objectives</h3>
+        <ol>
+            <li>Develop accurate prediction models for CO levels</li>
+            <li>Create a robust ensemble system</li>
+            <li>Provide real-time health impact assessment</li>
+            <li>Visualize and analyze model performance</li>
+            <li>Ensure system reliability and accuracy</li>
+        </ol>
+    </section>
+
+    <section id="dataset-analysis">
+        <h2>3. Dataset Analysis</h2>
+        <h3>3.1 Dataset Overview</h3>
+        <p><strong>Source</strong>: Air Quality UCI Dataset</p>
+        <ul>
+            <li><strong>Time Period</strong>: March 2004 to February 2005</li>
+            <li><strong>Location</strong>: Italian city with significant air pollution</li>
+            <li><strong>Instances</strong>: 9,358</li>
+            <li><strong>Features</strong>: 15 columns</li>
+            <li><strong>Target Variable</strong>: CO(GT) concentration</li>
+        </ul>
+
+        <h3>3.2 Feature Description</h3>
+        <h4>3.2.1 Sensor Measurements</h4>
+        <table>
+            <tr>
+                <th>Sensor</th>
+                <th>Type</th>
+                <th>Target Gas</th>
+                <th>Material</th>
+            </tr>
+            <tr>
+                <td>PT08.S1</td>
+                <td>Metal Oxide</td>
+                <td>CO</td>
+                <td>Tin Oxide</td>
+            </tr>
+            <tr>
+                <td>PT08.S2</td>
+                <td>Metal Oxide</td>
+                <td>NMHC</td>
+                <td>Titania</td>
+            </tr>
+            <tr>
+                <td>PT08.S3</td>
+                <td>Metal Oxide</td>
+                <td>NOx</td>
+                <td>Tungsten Oxide</td>
+            </tr>
+            <tr>
+                <td>PT08.S4</td>
+                <td>Metal Oxide</td>
+                <td>NO2</td>
+                <td>Tungsten Oxide</td>
+            </tr>
+            <tr>
+                <td>PT08.S5</td>
+                <td>Metal Oxide</td>
+                <td>O3</td>
+                <td>Indium Oxide</td>
+            </tr>
+        </table>
+
+        <h4>3.2.2 Environmental Parameters</h4>
+        <table>
+            <tr>
+                <th>Parameter</th>
+                <th>Unit</th>
+                <th>Description</th>
+                <th>Range</th>
+            </tr>
+            <tr>
+                <td>T</td>
+                <td>°C</td>
+                <td>Temperature</td>
+                <td>-50 to 50</td>
+            </tr>
+            <tr>
+                <td>RH</td>
+                <td>%</td>
+                <td>Relative Humidity</td>
+                <td>0 to 100</td>
+            </tr>
+        </table>
+
+        <h4>3.2.3 Ground Truth Measurements</h4>
+        <table>
+            <tr>
+                <th>Parameter</th>
+                <th>Unit</th>
+                <th>Description</th>
+                <th>Range</th>
+            </tr>
+            <tr>
+                <td>C6H6(GT)</td>
+                <td>µg/m³</td>
+                <td>Benzene</td>
+                <td>0 to 100</td>
+            </tr>
+            <tr>
+                <td>NOx(GT)</td>
+                <td>ppb</td>
+                <td>Nitrogen Oxides</td>
+                <td>0 to 1000</td>
+            </tr>
+            <tr>
+                <td>NO2(GT)</td>
+                <td>µg/m³</td>
+                <td>Nitrogen Dioxide</td>
+                <td>0 to 1000</td>
+            </tr>
+            <tr>
+                <td>NMHC(GT)</td>
+                <td>µg/m³</td>
+                <td>Non-Methane Hydrocarbons</td>
+                <td>0 to 1000</td>
+            </tr>
+        </table>
+
+        <h3>3.3 Data Preprocessing</h3>
+        <h4>3.3.1 Missing Value Treatment</h4>
+        <pre><code># Step 1: Identify missing values (marked as -200)
+missing_values = df[df == -200].count()
+print("Initial missing values per column:")
+for col in df.columns:
+    count = df[df[col] == -200].shape[0]
+    if count > 0:
+        print(f"{col}: {count} ({count/len(df)*100:.2f}%)")
+
+# Step 2: Replace -200 with NaN for proper handling
+df_clean = df.replace(-200, np.nan)
+
+# Step 3: KNN Imputation with k=5 neighbors
+imputer = KNNImputer(n_neighbors=5)
+numerical_cols = df_clean.select_dtypes(include=[np.number]).columns
+df_clean[numerical_cols] = imputer.fit_transform(df_clean[numerical_cols])</code></pre>
+
+        <h5>Example Output:</h5>
+        <pre><code>Initial missing values per column:
+CO(GT): 120 (1.28%)
+NOx(GT): 150 (1.60%)
+NO2(GT): 100 (1.07%)
+T: 80 (0.85%)
+RH: 90 (0.96%)
+
+Example of KNN Imputation:
+Before imputation:
+Date: 2004-03-15
+Time: 10:00:00
+CO(GT): -200.0
+PT08.S1(CO): 1100.0
+...
+
+After imputation:
+Date: 2004-03-15
+Time: 10:00:00
+CO(GT): 2.1
+PT08.S1(CO): 1100.0
+...</code></pre>
+
+        <h4>3.3.2 Feature Engineering</h4>
+        <h5>Temporal Features Example:</h5>
+        <pre><code>Temporal Features Example:
+Original DateTime: 2004-03-10 18:00:00
+Hour: 18
+Day of Week: 2 (Wednesday)
+Month: 3
+Day of Year: 70</code></pre>
+
+        <h5>Derived Ratios and Interactions:</h5>
+        <pre><code># Calculate important ratios
+df_clean['NOx_NO2_ratio'] = df_clean['NOx(GT)'] / (df_clean['NO2(GT)'] + 1e-6)
+df_clean['CO_NMHC_ratio'] = df_clean['PT08.S1(CO)'] / (df_clean['NMHC(GT)'] + 1e-6)
+
+# Calculate sensor response ratios
+df_clean['S1_S2_ratio'] = df_clean['PT08.S1(CO)'] / (df_clean['PT08.S2(NMHC)'] + 1e-6)
+df_clean['S3_S4_ratio'] = df_clean['PT08.S3(NOx)'] / (df_clean['PT08.S4(NO2)'] + 1e-6)
+
+# Example calculation for a single row:
+print("\nDerived Features Example:")
+sample_row = df_clean.iloc[0]
+print(f"NOx(GT): {sample_row['NOx(GT)']:.2f}")
+print(f"NO2(GT): {sample_row['NO2(GT)']:.2f}")
+print(f"NOx/NO2 Ratio: {sample_row['NOx_NO2_ratio']:.2f}")</code></pre>
+
+        <h5>Example Output:</h5>
+        <pre><code>Derived Features Example:
+NOx(GT): 166.00
+NO2(GT): 113.00
+NOx/NO2 Ratio: 1.47</code></pre>
+
+        <h5>Environmental Interactions:</h5>
+        <pre><code># Calculate temperature-humidity interaction
+df_clean['T_RH_interaction'] = df_clean['T'] * df_clean['RH'] / 100
+
+# Calculate absolute humidity (Magnus formula)
+def calculate_absolute_humidity(T, RH):
+    # Constants for Magnus formula
+    a = 6.112
+    b = 17.67
+    c = 243.5
+    
+    # Calculate saturation vapor pressure
+    es = a * np.exp((b * T) / (c + T))
+    # Calculate actual vapor pressure
+    e = (RH / 100) * es
+    # Calculate absolute humidity (g/m³)
+    AH = (2.16679 * e) / (273.15 + T)
+    return AH
+
+df_clean['AH'] = calculate_absolute_humidity(df_clean['T'], df_clean['RH'])
+
+print("\nEnvironmental Interactions Example:")
+sample_row = df_clean.iloc[0]
+print(f"Temperature: {sample_row['T']:.1f}°C")
+print(f"Relative Humidity: {sample_row['RH']:.1f}%")
+print(f"T-RH Interaction: {sample_row['T_RH_interaction']:.2f}")
+print(f"Absolute Humidity: {sample_row['AH']:.3f} g/m³")</code></pre>
+
+        <h5>Example Output:</h5>
+        <pre><code>Environmental Interactions Example:
+Temperature: 13.6°C
+Relative Humidity: 48.9%
+T-RH Interaction: 6.65
+Absolute Humidity: 0.758 g/m³</code></pre>
+
+        <h5>Feature Scaling:</h5>
+        <pre><code># Standard scaling of numerical features
+scaler = StandardScaler()
+numerical_features = ['PT08.S1(CO)', 'PT08.S2(NMHC)', 'PT08.S3(NOx)',
+                     'PT08.S4(NO2)', 'PT08.S5(O3)', 'T', 'RH']
+
+df_clean[numerical_features] = scaler.fit_transform(df_clean[numerical_features])
+
+print("\nFeature Scaling Example:")
+print("Before scaling:")
+print(df[numerical_features].iloc[0])
+print("\nAfter scaling:")
+print(df_clean[numerical_features].iloc[0])</code></pre>
+
+        <h5>Example Output:</h5>
+        <pre><code>Feature Scaling Example:
+Before scaling:
+PT08.S1(CO)     1360.00
+PT08.S2(NMHC)   1045.50
+PT08.S3(NOx)    1056.25
+PT08.S4(NO2)    1692.00
+PT08.S5(O3)     1267.50
+T               13.60
+RH              48.88
+
+After scaling:
+PT08.S1(CO)     0.942
+PT08.S2(NMHC)   0.441
+PT08.S3(NOx)    0.813
+PT08.S4(NO2)    0.644
+PT08.S5(O3)     0.641
+T               0.089
+RH              0.183</code></pre>
+    </section>
+
+    <section id="system-architecture">
+        <h2>4. System Architecture</h2>
+        <h3>4.1 High-Level Architecture</h3>
+        <div class="mermaid">
+            flowchart TB
+                subgraph Input[Input Layer]
+                    direction TB
+                    A1[Raw Sensor Data] --> A2[Environmental Parameters] --> A3[Ground Truth Measurements]
+                end
+
+                subgraph Preprocess[Data Preprocessing]
+                    direction TB
+                    B1[Data Validation] --> B2[Type Conversion] --> B3[Missing Value Treatment]
+                end
+
+                subgraph Features[Feature Engineering]
+                    direction TB
+                    C1[Temporal Features] --> C2[Derived Ratios] --> C3[Environmental Interactions] --> C4[Feature Scaling]
+                end
+
+                subgraph Models[Model Ensemble]
+                    direction TB
+                    D1[Neural Network] & D2[Random Forest] & D3[Linear Regression] --> D4[Ensemble Weighting]
+                end
+
+                subgraph Predict[Prediction Layer]
+                    direction TB
+                    E1[Model Predictions] --> E2[Ensemble Weighting] --> E3[Final Prediction]
+                end
+
+                subgraph Output[Output Processing]
+                    direction TB
+                    F1[Air Quality Category] --> F2[Health Implications] --> F3[Visualization]
+                end
+
+                Input --> Preprocess
+                Preprocess --> Features
+                Features --> Models
+                Models --> Predict
+                Predict --> Output
+
+                style Input fill:#f9f,stroke:#333,stroke-width:2px
+                style Preprocess fill:#bbf,stroke:#333,stroke-width:2px
+                style Features fill:#bfb,stroke:#333,stroke-width:2px
+                style Models fill:#fbb,stroke:#333,stroke-width:2px
+                style Predict fill:#fbf,stroke:#333,stroke-width:2px
+                style Output fill:#bff,stroke:#333,stroke-width:2px
+
+                classDef default fill:#fff,stroke:#333,stroke-width:1px
+                classDef subgraphStyle fill:none,stroke:#333,stroke-width:2px
+                class Input,Preprocess,Features,Models,Predict,Output subgraphStyle
+        </div>
+
+        <h3>4.2 Detailed Data Flow</h3>
+        <h4>4.2.1 Input Processing Layer</h4>
+        <h5>Data Validation:</h5>
+        <pre><code>def validate_input(data):
+    # Define valid ranges for each input
+    valid_ranges = {
+        'PT08.S1(CO)': (200, 2500),    # CO sensor response
+        'PT08.S2(NMHC)': (200, 2500),  # NMHC sensor response
+        'T': (-50, 50),                 # Temperature in °C
+        'RH': (0, 100),                 # Relative Humidity in %
+        'C6H6(GT)': (0, 100),          # Benzene concentration
+        'NOx(GT)': (0, 2000),          # NOx concentration
+        'NO2(GT)': (0, 500)            # NO2 concentration
+    }
+    
+    # Check each input against its valid range
+    for feature, (min_val, max_val) in valid_ranges.items():
+        if data[feature] < min_val or data[feature] > max_val:
+            raise ValueError(f"{feature} value {data[feature]} is outside valid range [{min_val}, {max_val}]")</code></pre>
+
+        <h5>Data Type Conversion:</h5>
+        <pre><code>def preprocess_input(raw_data):
+    # Convert string inputs to appropriate numeric types
+    numeric_features = {
+        'PT08.S1(CO)': float,
+        'PT08.S2(NMHC)': float,
+        'T': float,
+        'RH': float,
+        'C6H6(GT)': float,
+        'NOx(GT)': float,
+        'NO2(GT)': float
+    }
+    
+    processed_data = {}
+    for feature, dtype in numeric_features.items():
+        try:
+            processed_data[feature] = dtype(raw_data[feature])
+        except ValueError:
+            raise ValueError(f"Invalid input for {feature}: {raw_data[feature]}")
+    
+    return processed_data</code></pre>
+
+        <h4>4.2.2 Feature Processing Pipeline</h4>
+        <pre><code>class FeatureProcessor:
+    def __init__(self):
+        self.scaler = StandardScaler()
+        
+    def process_features(self, data):
+        # 1. Calculate temporal features
+        data = self.add_temporal_features(data)
+        
+        # 2. Calculate derived ratios
+        data = self.add_derived_ratios(data)
+        
+        # 3. Calculate environmental interactions
+        data = self.add_environmental_features(data)
+        
+        # 4. Scale features
+        data = self.scale_features(data)
+        
+        return data
+    
+    def add_temporal_features(self, data):
+        if 'DateTime' in data:
+            data['Hour'] = data['DateTime'].hour
+            data['DayOfWeek'] = data['DateTime'].dayofweek
+        return data
+    
+    def add_derived_ratios(self, data):
+        data['NOx_NO2_ratio'] = data['NOx(GT)'] / (data['NO2(GT)'] + 1e-6)
+        return data
+    
+    def add_environmental_features(self, data):
+        data['T_RH_interaction'] = data['T'] * data['RH'] / 100
+        return data
+    
+    def scale_features(self, data):
+        scaled_features = self.scaler.transform(data[self.feature_columns])
+        data[self.feature_columns] = scaled_features
+        return data</code></pre>
+
+        <h4>4.2.3 Model Ensemble Pipeline</h4>
+        <pre><code>class ModelEnsemble:
+    def __init__(self):
+        self.models = {
+            'linear': LinearRegression(),
+            'rf': RandomForestRegressor(n_estimators=100),
+            'nn': self.build_neural_network()
+        }
+        
+    def predict(self, features):
+        predictions = {}
+        for name, model in self.models.items():
+            predictions[name] = model.predict(features)
+        
+        # Calculate ensemble average
+        ensemble_pred = np.mean(list(predictions.values()), axis=0)
+        return predictions, ensemble_pred
+    
+    def build_neural_network(self):
+        model = Sequential([
+            Dense(256, activation='relu'),
+            BatchNormalization(),
+            Dropout(0.4),
+            Dense(128, activation='relu'),
+            BatchNormalization(),
+            Dropout(0.3),
+            Dense(64, activation='relu'),
+            BatchNormalization(),
+            Dropout(0.2),
+            Dense(1)
+        ])
+        return model</code></pre>
+
+        <h4>4.2.4 Output Processing Pipeline</h4>
+        <pre><code>class OutputProcessor:
+    def __init__(self):
+        self.categories = {
+            'Good': {'range': (0, 1.0),
+                    'message': 'Little to no health risk'},
+            'Moderate': {'range': (1.0, 2.0),
+                        'message': 'May affect sensitive individuals'},
+            'Unhealthy for Sensitive Groups': {'range': (2.0, 3.0),
+                                             'message': 'Children and respiratory patients at risk'},
+            'Unhealthy': {'range': (3.0, 4.0),
+                         'message': 'Everyone may experience effects'},
+            'Very Unhealthy': {'range': (4.0, 5.0),
+                             'message': 'Emergency conditions warning'},
+            'Hazardous': {'range': (5.0, float('inf')),
+                         'message': 'Serious health effects for all'}
+        }
+    
+    def process_prediction(self, prediction):
+        category = self.get_category(prediction)
+        health_message = self.get_health_message(category)
+        
+        return {
+            'prediction': prediction,
+            'category': category,
+            'health_implications': health_message
+        }
+    
+    def get_category(self, value):
+        for category, info in self.categories.items():
+            min_val, max_val = info['range']
+            if min_val <= value < max_val:
+                return category
+        return 'Hazardous'
+    
+    def get_health_message(self, category):
+        return self.categories[category]['message']</code></pre>
+
+        <h3>4.3 Data Flow Example</h3>
+        <h4>4.3.1 Raw Input</h4>
+        <pre><code>raw_input = {
+    'PT08.S1(CO)': '1360',
+    'PT08.S2(NMHC)': '1046',
+    'T': '13.6',
+    'RH': '48.9',
+    'C6H6(GT)': '11.9',
+    'NOx(GT)': '166',
+    'NO2(GT)': '113'
+}</code></pre>
+
+        <h4>4.3.2 Validated and Processed Input</h4>
+        <pre><code>processed_input = {
+    'PT08.S1(CO)': 1360.0,
+    'PT08.S2(NMHC)': 1046.0,
+    'T': 13.6,
+    'RH': 48.9,
+    'C6H6(GT)': 11.9,
+    'NOx(GT)': 166.0,
+    'NO2(GT)': 113.0
+}</code></pre>
+
+        <h4>4.3.3 Engineered Features</h4>
+        <pre><code>engineered_features = {
+    # Original features
+    'PT08.S1(CO)': 0.942,  # scaled
+    'PT08.S2(NMHC)': 0.441,  # scaled
+    'T': 0.089,  # scaled
+    'RH': 0.183,  # scaled
+    
+    # Derived features
+    'NOx_NO2_ratio': 1.47,
+    'T_RH_interaction': 6.65,
+    'Hour': 18,
+    'DayOfWeek': 2
+}</code></pre>
+
+        <h4>4.3.4 Model Predictions</h4>
+        <pre><code>predictions = {
+    'linear': 2.81,
+    'rf': 2.79,
+    'nn': 2.70,
+    'ensemble': 2.77
+}</code></pre>
+
+        <h4>4.3.5 Final Output</h4>
+        <pre><code>output = {
+    'prediction': 2.77,
+    'category': 'Unhealthy for Sensitive Groups',
+    'health_implications': 'Children and people with respiratory 
+conditions may experience health effects'
+}</code></pre>
+    </section>
+
+    <section id="model-development">
+        <h2>5. Model Development</h2>
+        <h3>5.1 Neural Network Architecture</h3>
+        <pre><code>def build_neural_network(input_dim):
+    model = Sequential([
+        # Input Layer
+        Dense(256, input_dim=input_dim, kernel_initializer='he_normal'),
+        BatchNormalization(),
+        Activation('relu'),
+        Dropout(0.4),
+        
+        # Hidden Layer 1
+        Dense(128, kernel_initializer='he_normal'),
+        BatchNormalization(),
+        Activation('relu'),
+        Dropout(0.3),
+        
+        # Hidden Layer 2
+        Dense(64, kernel_initializer='he_normal'),
+        BatchNormalization(),
+        Activation('relu'),
+        Dropout(0.2),
+        
+        # Output Layer
+        Dense(1, activation='linear')
+    ])
+    
+    return model</code></pre>
+
+        <h4>5.1.1 Layer-by-Layer Explanation</h4>
+        <p>1. <strong>Input Layer (Dense-256)</strong></p>
+        <ul>
+            <li>Dimensionality: 256 neurons</li>
+            <li>Weight Initialization: He Normal initialization</li>
+            <li>Purpose: Initial feature transformation and pattern extraction</li>
+        </ul>
+
+        <p>Mathematical representation:</p>
+        <p class="math">h₁ = σ(W₁x + b₁)</p>
+        <p>where:</p>
+        <ul>
+            <li>x is the input vector</li>
+            <li>W₁ is the weight matrix</li>
+            <li>b₁ is the bias vector</li>
+            <li>σ is the ReLU activation function</li>
+        </ul>
+
+        <p>2. <strong>Batch Normalization</strong></p>
+        <p>Purpose: Normalizes layer outputs to reduce internal covariate shift</p>
+        <p>Formula:</p>
+        <p class="math">x̂ = (x - μ_B) / √(σ_B² + ε)</p>
+        <p class="math">y = γx̂ + β</p>
+        <p>where:</p>
+        <ul>
+            <li>μ_B is the mini-batch mean</li>
+            <li>σ_B² is the mini-batch variance</li>
+            <li>ε is a small constant for numerical stability</li>
+            <li>γ, β are learnable parameters</li>
+        </ul>
+
+        <p>3. <strong>Activation Functions</strong></p>
+        <p>ReLU (Rectified Linear Unit):</p>
+        <p class="math">f(x) = max(0, x)</p>
+        <p>Linear (Output Layer):</p>
+        <p class="math">f(x) = x</p>
+
+        <p>4. <strong>Dropout Layers</strong></p>
+        <p>Rates: 0.4, 0.3, 0.2 (decreasing pattern)</p>
+        <p>During training, each neuron has probability p of being temporarily "dropped":</p>
+        <p class="math">y = {x/(1-p) with probability 1-p, 0 with probability p}</p>
+
+        <h3>5.2 Training Process</h3>
+        <h4>5.2.1 Loss Function</h4>
+        <p class="math">MSE = (1/n)∑(yᵢ - ŷᵢ)²</p>
+
+        <h4>5.2.2 Optimizer</h4>
+        <p>Update rule for each parameter θ:</p>
+        <p class="math">m_t = β₁m_{t-1} + (1-β₁)g_t</p>
+        <p>where:</p>
+        <ul>
+            <li>m_t: First moment estimate at time t (exponentially weighted average of gradients)</li>
+            <li>β₁: Exponential decay rate for the first moment estimates (typically 0.9)</li>
+            <li>m_{t-1}: Previous first moment estimate</li>
+            <li>g_t: Current gradient at time t</li>
+        </ul>
+
+        <p class="math">v_t = β₂v_{t-1} + (1-β₂)g_t²</p>
+        <p>where:</p>
+        <ul>
+            <li>v_t: Second moment estimate at time t (exponentially weighted average of squared gradients)</li>
+            <li>β₂: Exponential decay rate for the second moment estimates (typically 0.999)</li>
+            <li>v_{t-1}: Previous second moment estimate</li>
+            <li>g_t²: Square of the current gradient</li>
+        </ul>
+
+        <p class="math">m̂_t = m_t/(1-β₁^t)</p>
+        <p>where:</p>
+        <ul>
+            <li>m̂_t: Bias-corrected first moment estimate</li>
+            <li>1-β₁^t: Bias correction term for the first moment</li>
+            <li>t: Current time step</li>
+        </ul>
+
+        <p class="math">v̂_t = v_t/(1-β₂^t)</p>
+        <p>where:</p>
+        <ul>
+            <li>v̂_t: Bias-corrected second moment estimate</li>
+            <li>1-β₂^t: Bias correction term for the second moment</li>
+        </ul>
+
+        <p class="math">θ_t = θ_{t-1} - α(m̂_t/√(v̂_t) + ε)</p>
+        <p>where:</p>
+        <ul>
+            <li>θ_t: Updated parameter at time t</li>
+            <li>θ_{t-1}: Previous parameter value</li>
+            <li>α: Learning rate</li>
+            <li>m̂_t/√(v̂_t): Adaptive learning rate term</li>
+            <li>ε: Small constant (typically 1e-8) to prevent division by zero</li>
+        </ul>
+
+        <p>Key characteristics of the Adam optimizer:</p>
+        <ul>
+            <li>Combines the benefits of momentum (first moment) and RMSprop (second moment)</li>
+            <li>Adapts learning rates for each parameter individually</li>
+            <li>Includes bias correction to account for initialization bias</li>
+            <li>Works well with sparse gradients and noisy problems</li>
+        </ul>
+
+        <h4>5.2.3 Training Configuration</h4>
+        <pre><code>model.compile(
+    optimizer=optimizer,
+    loss='mse',
+    metrics=['mae', 'mse', r2_score]
+)
+
+history = model.fit(
+    X_train, y_train,
+    epochs=100,
+    batch_size=32,
+    validation_split=0.2,
+    callbacks=[
+        EarlyStopping(
+            monitor='val_loss',
+            patience=10,
+            restore_best_weights=True
+        ),
+        ReduceLROnPlateau(
+            monitor='val_loss',
+            factor=0.5,
+            patience=5,
+            min_lr=1e-6
+        )
+    ]
+)</code></pre>
+
+        <h3>5.3 Random Forest Model</h3>
+        <p>The Random Forest model complements the neural network by providing:</p>
+        <ul>
+            <li>Feature importance rankings</li>
+            <li>Robust performance on non-linear relationships</li>
+            <li>Handling of outliers and missing values</li>
+        </ul>
+
+        <pre><code>rf_model = RandomForestRegressor(
+    n_estimators=100,
+    max_depth=None,
+    min_samples_split=2,
+    min_samples_leaf=1,
+    max_features='auto',
+    bootstrap=True,
+    random_state=42
+)</code></pre>
+
+        <h4>Key hyperparameters:</h4>
+        <ul>
+            <li>n_estimators: Number of trees in the forest</li>
+            <li>max_depth: Maximum depth of each tree</li>
+            <li>min_samples_split: Minimum samples required to split a node</li>
+            <li>min_samples_leaf: Minimum samples required at a leaf node</li>
+        </ul>
+
+        <p>Feature importance calculation:</p>
+        <p class="math">importance_j = (1/M)∑_{m=1}^M∑_{t∈T_m}p(t)[Δi(s_t,j)]</p>
+        <p>where:</p>
+        <ul>
+            <li>M is the number of trees</li>
+            <li>T_m is the set of nodes in tree m</li>
+            <li>p(t) is the proportion of samples reaching node t</li>
+            <li>Δi(s_t,j) is the importance of feature j at split s_t</li>
+        </ul>
+
+        <h3>5.4 Linear Regression Baseline</h3>
+        <p>The linear regression model serves as a baseline and provides interpretable coefficients:</p>
+
+        <pre><code>lr_model = LinearRegression(
+    fit_intercept=True,
+    normalize=False,
+    copy_X=True,
+    n_jobs=None
+)</code></pre>
+
+        <p>Model equation:</p>
+        <p class="math">ŷ = β₀ + ∑_{i=1}^n β_i x_i</p>
+
+        <p>Coefficient estimation using Ordinary Least Squares (OLS):</p>
+        <p class="math">β = (X^TX)^{-1}X^Ty</p>
+
+        <h3>5.5 Model Ensemble</h3>
+        <p>The final prediction is a weighted average of all models:</p>
+        <p class="math">ŷ_{ensemble} = w_{nn}ŷ_{nn} + w_{rf}ŷ_{rf} + w_{lr}ŷ_{lr}</p>
+
+        <p>Weights are determined by model performance on validation data:</p>
+        <p class="math">w_i = (1/MSE_i)/∑_{j} 1/MSE_j</p>
+
+        <p>This ensures that models with lower error contribute more to the final prediction.</p>
+    </section>
+
+    <section id="implementation-details">
+        <h2>6. Implementation Details</h2>
+        <h3>6.1 Project Structure</h3>
+        <pre><code>project/
+│
+├── train_model.py       # Training script
+├── predict.py          # Prediction script
+├── feature_names.csv   # Feature definitions
+├── AirQualityUCI.xlsx # Dataset
+├── project_report.md   # This report
+│
+├── models/
+│   ├── linear_model.joblib
+│   ├── rf_model.joblib
+│   ├── nn_model.keras
+│   └── scaler.joblib
+│
+└── plots/
+    ├── model_performance.png
+    ├── feature_importance.png
+    ├── error_distribution.png
+    └── metrics_comparison.png</code></pre>
+
+        <h3>6.2 Dependencies</h3>
+        <pre><code>import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, BatchNormalization, Activation
+import matplotlib.pyplot as plt
+import seaborn as sns
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau</code></pre>
+    </section>
+
+    <section id="results-and-analysis">
+        <h2>7. Results and Analysis</h2>
+        <h3>7.1 Model Performance Metrics</h3>
+        <div class="diagram">
+            <img src="plots/metrics_comparison.png" alt="Model Performance Metrics">
+        </div>
+
+        <h3>7.2 Feature Importance</h3>
+        <div class="diagram">
+            <img src="plots/feature_importance.png" alt="Feature Importance">
+        </div>
+
+        <h3>7.3 Error Distribution</h3>
+        <div class="diagram">
+            <img src="plots/error_distribution.png" alt="Error Distribution">
+        </div>
+
+        <h3>7.4 Prediction vs Actual</h3>
+        <div class="diagram">
+            <img src="plots/model_performance.png" alt="Prediction vs Actual">
+        </div>
+
+        <h3>7.5 Air Quality Categories</h3>
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>CO Range (mg/m³)</th>
+                <th>Health Implications</th>
+            </tr>
+            <tr>
+                <td>Good</td>
+                <td>&lt; 1.0</td>
+                <td>Little to no health risk</td>
+            </tr>
+            <tr>
+                <td>Moderate</td>
+                <td>1.0 - 2.0</td>
+                <td>May affect sensitive individuals</td>
+            </tr>
+            <tr>
+                <td>Unhealthy for Sensitive Groups</td>
+                <td>2.0 - 3.0</td>
+                <td>Children and respiratory patients at risk</td>
+            </tr>
+            <tr>
+                <td>Unhealthy</td>
+                <td>3.0 - 4.0</td>
+                <td>Everyone may experience effects</td>
+            </tr>
+            <tr>
+                <td>Very Unhealthy</td>
+                <td>4.0 - 5.0</td>
+                <td>Emergency conditions warning</td>
+            </tr>
+            <tr>
+                <td>Hazardous</td>
+                <td>&gt; 5.0</td>
+                <td>Serious health effects for all</td>
+            </tr>
+        </table>
+    </section>
+
+    <section id="usage-guide">
+        <h2>8. Usage Guide</h2>
+        <h3>8.1 Training the Models</h3>
+        <pre><code>python train_model.py</code></pre>
+
+        <h3>8.2 Making Predictions</h3>
+        <pre><code>python predict.py</code></pre>
+
+        <h3>8.3 Sample Input</h3>
+        <pre><code>Air Quality Index Prediction System
+==================================================
+
+Enter the following air quality measurements:
+
+CO sensor response: 1360
+NMHC sensor response: 1046
+NOx sensor response: 1056
+NO2 sensor response: 1692
+Ozone sensor response: 1268
+Temperature (°C): 13.6
+Relative Humidity (%): 48.9
+Benzene (µg/m³): 11.9
+NOx (ppb): 166
+NO2 (µg/m³): 113
+NMHC (µg/m³): 150</code></pre>
+
+        <h3>8.4 Sample Output</h3>
+        <pre><code>CO Level Predictions:
+==================================================
+Linear Regression: 2.45 mg/m³
+Random Forest: 2.38 mg/m³
+Neural Network: 2.41 mg/m³
+
+Ensemble Average Prediction: 2.41 mg/m³
+
+Air Quality Category:
+Unhealthy for Sensitive Groups
+Health implications: Children and people with respiratory 
+conditions may experience health effects</code></pre>
+    </section>
+
+    <section id="future-improvements">
+        <h2>9. Future Improvements</h2>
+        <h3>9.1 Model Enhancements</h3>
+        <ol>
+            <li><strong>Advanced Architectures</strong>:
+                <ul>
+                    <li>Transformer models for temporal patterns</li>
+                    <li>Attention mechanisms</li>
+                    <li>Hybrid CNN-LSTM architectures</li>
+                </ul>
+            </li>
+            <li><strong>Feature Engineering</strong>:
+                <ul>
+                    <li>Weather data integration</li>
+                    <li>Spatial features</li>
+                    <li>Advanced temporal features</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>9.2 System Improvements</h3>
+        <ol>
+            <li><strong>User Interface</strong>:
+                <ul>
+                    <li>Web application</li>
+                    <li>Mobile app</li>
+                    <li>REST API</li>
+                </ul>
+            </li>
+            <li><strong>Monitoring</strong>:
+                <ul>
+                    <li>Model drift detection</li>
+                    <li>Automated retraining</li>
+                    <li>Performance logging</li>
+                </ul>
+            </li>
+        </ol>
+    </section>
+
+    <section id="technical-documentation">
+        <h2>10. Technical Documentation</h2>
+        <h3>10.1 Model Parameters</h3>
+        <h4>10.1.1 Random Forest</h4>
+        <pre><code>RandomForestRegressor(
+    n_estimators=100,
+    random_state=42,
+    criterion='mse',
+    max_depth=None,
+    min_samples_split=2,
+    min_samples_leaf=1
+)</code></pre>
+
+        <h4>10.1.2 Neural Network</h4>
+        <pre><code>model = Sequential([
+    Dense(256, activation='relu'),
+    BatchNormalization(),
+    Dropout(0.4),
+    Dense(128, activation='relu'),
+    BatchNormalization(),
+    Dropout(0.3),
+    Dense(64, activation='relu'),
+    BatchNormalization(),
+    Dropout(0.2),
+    Dense(1)
+])</code></pre>
+
+        <h3>10.2 Input Validation</h3>
+        <pre><code>ranges = {
+    'T': (-50, 50),
+    'RH': (0, 100),
+    'Hour': (0, 23),
+    'NOx(GT)': (0, 1000),
+    'NO2(GT)': (0, 1000),
+    'NMHC(GT)': (0, 1000),
+    'C6H6(GT)': (0, 100)
+}</code></pre>
+
+        <h3>10.3 Performance Metrics</h3>
+        <h4>10.3.1 RMSE</h4>
+        <p class="math">RMSE = √(1/n)∑(yᵢ - ŷᵢ)²</p>
+
+        <h4>10.3.2 MAE</h4>
+        <p class="math">MAE = (1/n)∑|yᵢ - ŷᵢ|</p>
+
+        <h4>10.3.3 R² Score</h4>
+        <p class="math">R² = 1 - ∑(yᵢ - ŷᵢ)²/∑(yᵢ - ȳ)²</p>
+    </section>
+
+    <section id="references">
+        <h2>11. References</h2>
+        <div class="references">
+            <ol>
+                <li>
+                    <span class="ref-title">Air Quality UCI Dataset</span>
+                    <span class="ref-authors">S. De Vito, E. Massera, M. Piga, L. Martinotto, G. Di Francia</span>
+                    <span class="ref-source">UCI Machine Learning Repository</span>
+                    <span class="ref-year">2004-2005</span>
+                    <a href="https://archive.ics.uci.edu/ml/datasets/Air+Quality" class="ref-link">https://archive.ics.uci.edu/ml/datasets/Air+Quality</a>
+                </li>
+                <li>
+                    <span class="ref-title">Deep Learning with Python</span>
+                    <span class="ref-authors">François Chollet</span>
+                    <span class="ref-source">Manning Publications</span>
+                    <span class="ref-year">2021</span>
+                </li>
+                <li>
+                    <span class="ref-title">Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow</span>
+                    <span class="ref-authors">Aurélien Géron</span>
+                    <span class="ref-source">O'Reilly Media</span>
+                    <span class="ref-year">2022</span>
+                </li>
+                <li>
+                    <span class="ref-title">WHO Air Quality Guidelines</span>
+                    <span class="ref-authors">World Health Organization</span>
+                    <span class="ref-year">2021</span>
+                    <a href="https://www.who.int/publications/i/item/9789240034228" class="ref-link">WHO Guidelines</a>
+                </li>
+                <li>
+                    <span class="ref-title">Random Forest for Air Quality Prediction</span>
+                    <span class="ref-authors">Zhang, C., et al.</span>
+                    <span class="ref-source">Environmental Science and Pollution Research</span>
+                    <span class="ref-year">2020</span>
+                </li>
+                <li>
+                    <span class="ref-title">Adam: A Method for Stochastic Optimization</span>
+                    <span class="ref-authors">Kingma, D. P., & Ba, J.</span>
+                    <span class="ref-source">3rd International Conference for Learning Representations</span>
+                    <span class="ref-year">2015</span>
+                    <a href="https://arxiv.org/abs/1412.6980" class="ref-link">arXiv:1412.6980</a>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- <div class="note">
+        <p><strong>Note:</strong> This report is generated as part of the Air Quality Index Prediction System project. For updates and more information, please refer to the project repository.</p>
+    </div> -->
+</body>
+</html> 
